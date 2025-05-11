@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <div class="profile-container">
+        <h2>Welcome, {{ user.username }}!</h2>
+        {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 150px;">
+        {% else %}
+            <p>No profile picture uploaded.</p>
+        {% endif %}
+        <a href="{% url 'account_logout' %}" class="btn">Logout</a>
+    </div>
+    <div class="profile-container">
+        my borrowings
+    </div>
+</div>
+{% endblock %}

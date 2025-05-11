@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Choose Your Username</h2>
+          
+          <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="alert alert-danger">
+              {% for field in form %}
+                {% for error in field.errors %}
+                  <p class="mb-0">{{ error }}</p>
+                {% endfor %}
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+              <label for="id_username" class="form-label">Username</label>
+              <input type="text" name="username" class="form-control" id="id_username" required>
+              <div class="form-text">This is how other users will see you</div>
+            </div>
+
+            {% if form.email.value %}
+              <input type="hidden" name="email" value="{{ form.email.value }}">
+            {% endif %}
+
+            <div class="d-grid gap-2">
+              <button class="btn btn-success" type="submit">Complete Sign Up</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.card {
+  border: none;
+  border-radius: 10px;
+}
+.card-body {
+  padding: 2rem;
+}
+.btn-success {
+  background-color: #9EAB94;
+  border-color: #9EAB94;
+}
+.btn-success:hover {
+  background-color: #8A957F;
+  border-color: #8A957F;
+}
+</style>
+{% endblock %} 

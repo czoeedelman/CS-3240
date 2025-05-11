@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container mt-4">
+    <!-- Profile Section -->
+    <div class="row mb-5">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Profile Picture Column -->
+                        <div class="col-md-4 text-center border-end">
+                            {% if user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" 
+                                     class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto mb-3"
+                                     style="width: 150px; height: 150px;">
+                                    <span class="text-white" style="font-size: 3rem;">{{ user.first_name|first|default:user.username|first|upper }}</span>
+                                </div>
+                            {% endif %}
+                            
+                            <form method="post" enctype="multipart/form-data" action="{% url 'upload_profile_picture' %}" class="mt-3">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="id_profile_picture" class="form-label">Update Profile Picture</label>
+                                    <input type="file" name="profile_picture" class="form-control form-control-sm" 
+                                           id="id_profile_picture" accept="image/*">
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-success">Upload</button>
+                            </form>
+                        </div>
+                        
+                        <!-- User Info Column -->
+                        <div class="col-md-8">
+                            <h2 class="mb-3">{{ user.get_full_name|default:user.username }}</h2>
+                            <div class="user-info">
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-user me-2"></i>Username:</strong> 
+                                    {{ user.username }}
+                                </p>
+                                {% if user.first_name or user.last_name %}
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-id-card me-2"></i>Full Name:</strong> 
+                                    {{ user.get_full_name }}
+                                </p>
+                                {% endif %}
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-envelope me-2"></i>Email:</strong> 
+                                    {{ user.email }}
+                                </p>
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-calendar me-2"></i>Member Since:</strong> 
+                                    {{ user.date_joined|date:"F j, Y" }}
+                                </p>
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-user-tag me-2"></i>Account Type:</strong> 
+                                    {% if user.profile.is_librarian %}
+                                        <span class="badge bg-primary">Librarian</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Patron</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Borrowed Plants Section -->
+    <h3 class="text-center mb-4">Your Borrowed Plants</h3>
+    
+    {% if borrowed_plants %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for plant in borrowed_plants %}
+                <div class="col">
+                    <div class="card shadow-sm h-100">
+                        {% if plant.image %}
+                            <img src="{{ plant.image.url }}" class="card-img-top" alt="{{ plant.name }}"
+                                 style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default-plant.png' %}" class="card-img-top" alt="No Image Available"
+                                 style="height: 200px; object-fit: cover;">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h4 class="card-title text-center">{{ plant.name }}</h4>
+                            <p class="card-text">
+                                <strong>Due Date:</strong> 
+                                <span class="{% if plant.return_date|date:'Y-m-d' < now|date:'Y-m-d' %}text-danger{% endif %}">
+                                    {{ plant.return_date }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center">
+            <p class="text-muted">You have no plants currently borrowed.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Add Font Awesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<style>
+.user-info p {
+    color: #666;
+}
+.user-info strong {
+    color: #333;
+}
+.badge {
+    font-size: 0.9em;
+}
+.bg-success {
+    background-color: #9EAB94 !important;
+}
+.btn-success {
+    background-color: #9EAB94;
+    border-color: #9EAB94;
+}
+.btn-success:hover {
+    background-color: #8A957F;
+    border-color: #8A957F;
+}
+</style>
+{% endblock %}

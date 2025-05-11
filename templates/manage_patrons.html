@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Manage Patrons</h1>
+
+    <table class="table custom-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Librarian</th>
+                <th>Borrowed Plants</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.profile.is_librarian %}
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                        Yes
+                            {% if user != request.user %}
+                                <form method="POST" style="display: inline; float: right;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <input type="hidden" name="action" value="demote_to_patron">
+                                    <button type="submit">Demote</button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            No
+                            {% if user != request.user %}
+                                <form method="POST" style="display: inline; float: right;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <input type="hidden" name="action" value="promote_to_librarian">
+                                    <button type="submit">Promote</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                <td>
+                    {% for plant in user.borrowed_plants.all %}
+                            {{ plant.name }}
+                            <form method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="plant_id" value="{{ plant.id }}">
+                                <input type="hidden" name="action" value="remove_borrowed_plant">
+                                <button type="submit" class="">Return</button>
+                            </form>
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+
+    </table>
+
+</div>
+{% endblock %}

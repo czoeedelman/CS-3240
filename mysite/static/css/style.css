@@ -1,0 +1,187 @@
+:root {
+    --primary-color: #b8c4b3;
+    --secondary-color: #EDE6DA;
+    --background-color: #EDE6DA;
+    --text-color: #333;
+    --light-text-color: #333;
+    --header-bg: #b8c4b3;
+    --button-hover: #D6CCB9;
+    --card-border-color: #8A9A5B;
+    --card-color: #a6ae90;
+}
+
+body {
+    background-color: var(--background-color);
+    border: 20px solid #b8c4b3;
+    border-top-width: 75px;
+    margin: 0 auto;
+    color: var(--text-color);
+    display: flex;  /*Making this block will mess with nav*/
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    flex-direction: column;
+}
+
+.auth-container, .profile-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+header {
+    background-color: var(--header-bg);
+    color: var(--light-text-color);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: 1.7rem;
+    font-weight: bold;
+    border-radius: 50px;
+}
+
+.btn {
+    background-color: var(--secondary-color);
+    color: #333;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.btn:hover {
+    background-color: var(--button-hover);
+}
+
+nav{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 40px;
+}
+
+.link{
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #333;
+}
+
+.link:hover{
+    text-decoration: underline;
+}
+
+.card {
+    background-color: var(--card-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-color:var(--card-border-color);
+    border-width: 5px;
+    border-style: solid;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 350;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.card-img-top {
+    width: 50%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+    margin: 0 auto;
+    display: block;
+}
+
+.input-group {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.testimonial-group > .row {
+overflow-x: auto;
+white-space: nowrap;
+}
+.testimonial-group > .row > .col-xs-4 {
+display: inline-block;
+float: none;
+}
+
+.nav {
+    background-color: var(--primary-color);
+    margin-top: auto;
+    z-index: 1000;
+}
+
+.logo{
+    width: 21%;
+    height: auto;
+    margin-left: 40;
+}
+
+.status{
+    background-color: var(--secondary-color);
+    color: #333;
+    text-align: center;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    transition: background 0.3s ease-in-out;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.flex-wrapper {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+footer{
+    position: fixed;
+    bottom:0;
+    text-align: center;
+    display: block;
+    width: 100%;
+    background-color: #b8c4b3;
+    margin-top: 80%;
+}
+
+p{
+    --text-color: #333;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.form-control{
+    background-color: white;
+    border-radius: 25px;
+}

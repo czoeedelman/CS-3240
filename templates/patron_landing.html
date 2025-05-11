@@ -1,0 +1,17 @@
+<!-- templates/patron_landing.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Patron Dashboard</h1>
+<p>Welcome, {{ request.user.first_name }} (Patron)!</p>
+
+<p>You can browse items, request to borrow, and manage your requests.</p>
+
+<!-- <nav>
+    <ul>
+        <li><a href="{% url 'plant_list' %}">Browse Available Plants</a></li>
+        <li><a href="{% url 'my_requests' %}">View My Borrowing Requests</a></li>
+        <li><a href="{% url 'account_logout' %}">Logout</a></li>
+    </ul>
+</nav> -->
+{% endblock %}

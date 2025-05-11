@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+
+  <form method="GET" action="" class="mb-4">
+    <div class="input-group">
+      <input type="text" name="q" class="form-control" placeholder="Search collections..." value="{{ request.GET.q }}">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+
+  <h2>My Collections</h2>
+  
+  {% for collection in collections %}
+  {% if request.user == collection.creator %}
+    {% if not request.GET.q or request.GET.q|lower in collection.title|lower or request.GET.q|lower in collection.description|lower %}
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #ddd;">
+        <div>
+          <a href="{% url 'collection_detail' collection.id %}" class="link">
+            <strong>{{ collection.title }}</strong> by {{ collection.creator.username }}
+          </a>
+        </div>
+          <div style="display: flex; gap: 8px;">
+            <form action="{% url 'edit_collection' collection.id %}" method="get" style="margin: 0;">
+              <button type="submit" class="btn">Edit</button>
+            </form>
+            <form action="{% url 'delete_collection' collection.id %}" method="get" style="margin: 0;" onsubmit="return confirm('Are you sure you want to delete this collection?');">
+              <button type="submit" class="btn">Delete</button>
+            </form>
+          </div>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+  <h2 style="margin-top: 40px;">Other Public Collections</h2>
+
+  {% for collection in collections %}
+  {% if request.user != collection.creator and collection.is_public %}
+    {% if not request.GET.q or request.GET.q|lower in collection.title|lower or request.GET.q|lower in collection.description|lower %}
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #ddd;">
+        <div>
+          <a href="{% url 'collection_detail' collection.id %}" class="link">
+            <strong>{{ collection.title }}</strong> by {{ collection.creator.username }}
+          </a>
+          {% if user.profile.is_librarian %}
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <form action="{% url 'edit_collection' collection.id %}" method="get" style="margin: 0;">
+                <button type="submit" class="btn">Edit</button>
+              </form>
+              <form action="{% url 'delete_collection' collection.id %}" method="get" style="margin: 0;" onsubmit="return confirm('Are you sure you want to delete this collection?');">
+                <button type="submit" class="btn">Delete</button>
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+  <h2 style="margin-top: 40px;">Other Private Collections</h2>
+
+  {% for collection in collections %}
+  {% if not collection.is_public and request.user != collection.creator %}
+    {% if request.user in collection.allowed_users.all or request.user.profile.is_librarian %}
+      {% if not request.GET.q or request.GET.q|lower in collection.title|lower or request.GET.q|lower in collection.description|lower %}
+        <!-- Show the private collection if the user is approved -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #ddd;">
+          <div>
+            <a href="{% url 'collection_detail' collection.id %}" style="text-decoration: none;">
+              <strong>{{ collection.title }}</strong> by {{ collection.creator.username }}
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    {% else %}
+      <!-- Request Access Button -->
+      {% if not request.GET.q or request.GET.q|lower in collection.title|lower or request.GET.q|lower in collection.description|lower %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #ddd;">
+          <div>
+            <strong>{{ collection.title }}</strong> by {{ collection.creator.username }} <br>
+            <em>This is a private collection.</em>
+          </div>
+          <form action="{% url 'request_collection' collection.id %}" method="post" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn">
+              Request Access
+            </button>
+          </form>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+  {% if  user.profile.is_librarian %}
+  <h2 style="margin-top: 40px;">Create a New Collection</h2>
+  {% else %}
+  <h2 style="margin-top: 40px;">Create a New Public Collection</h2>
+  {% endif %}
+
+  <form method="POST" class="card p-4 bg-light border">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Create Collection</button>
+  </form>
+</div>
+{% endblock %}

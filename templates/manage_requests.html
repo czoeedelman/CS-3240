@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Manage Requests</h1>
+
+    <!-- Borrow Requests -->
+    <h2>Borrow Requests</h2>
+    {% if borrow_requests %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Plant</th>
+                    <th>User</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in borrow_requests %}
+                    <tr>
+                        <td>{{ request.plant.name }}</td>
+                        <td>{{ request.user.username }}</td>
+                        <td>
+                            <form method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="borrow_request_id" value="{{ request.id }}">
+                                <input type="hidden" name="action" value="approve">
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="borrow_request_id" value="{{ request.id }}">
+                                <input type="hidden" name="action" value="reject">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No borrow requests.</p>
+    {% endif %}
+
+    <h2>Extension Requests</h2>
+    {% if extension_requests %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Plant</th>
+                    <th>User</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in extension_requests %}
+                    <tr>
+                        <td>{{ request.plant.name }}</td>
+                        <td>{{ request.user.username }}</td>
+                        <td>
+                            <form method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="extension_request_id" value="{{ request.id }}">
+                                <input type="hidden" name="action" value="approve_extension">
+                                <button type="submit" class="btn btn-success btn-sm">Approve Extension</button>
+                            </form>
+                            <form method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="extension_request_id" value="{{ request.id }}">
+                                <input type="hidden" name="action" value="reject_extension">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject Extension</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No extension requests.</p>
+    {% endif %}
+
+
+    <!-- Collection Access Requests -->
+    <h2>Collection Access Requests</h2>
+    {% if collection_requests %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Collection</th>
+                    <th>User</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for collection in collection_requests %}
+                    {% for user in collection.requested_users.all %}
+                        <tr>
+                            <td>{{ collection.title }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>
+                                <form method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="collection_id" value="{{ collection.id }}">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <input type="hidden" name="action" value="approve">
+                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                </form>
+                                <form method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="collection_id" value="{{ collection.id }}">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <input type="hidden" name="action" value="reject">
+                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No collection access requests.</p>
+    {% endif %}
+</div>
+{% endblock %}

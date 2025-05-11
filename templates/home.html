@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% load socialaccount %}
+    <div class="container">
+        {% if user.is_authenticated %}
+            <div class="d-flex align-items-center mb-4" style="position: absolute; top: 20px; right: 20px;">
+                {% if profile_picture_url %}
+                    <img src="{{ profile_picture_url }}" alt="Profile Picture" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                {% endif %}
+                <span class="text-muted">Welcome, {{ user.first_name|default:user.username }}!</span>
+            </div>
+        {% endif %}
+
+        {% if not user.is_authenticated %}
+            <div class="text-center mt-5">
+                <h1 class="display-4">Welcome to Our Plant Rental Service!</h1>
+                <p class="lead mt-3">Please sign in to start borrowing plants.</p>
+            </div>
+        {% elif not user.profile.is_librarian %}
+            <div class="text-center mt-5">
+                <h1 class="display-4">Welcome to Our Plant Rental Service!</h1>
+                <p class="lead mt-3">Welcome Patron!</p>
+            </div>
+        {% else %}
+            <div class="text-center mt-5">
+                <h1 class="display-4">Welcome to Our Plant Rental Service!</h1>
+                <p class="lead mt-3">Thank you for being a trusted Librarian!</p>
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

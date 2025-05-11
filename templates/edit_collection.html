@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Edit Collection: {{ collection.title }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if not request.user.profile.is_librarian %}
+            <p class="text-muted">Note: Only librarians can modify the creator of this collection.</p>
+        {% endif %}
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+</div>
+{% endblock %}
